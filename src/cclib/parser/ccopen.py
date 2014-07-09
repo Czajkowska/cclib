@@ -21,7 +21,7 @@ from . import molproparser
 from . import nwchemparser
 from . import orcaparser
 from . import psiparser
-
+from . import terachemparser
 
 def ccopen(source, *args, **kargs):
     """Guess the identity of a particular log file and return an instance of it.
@@ -30,7 +30,7 @@ def ccopen(source, *args, **kargs):
       source - a single logfile, a list of logfiles, or an input stream
 
     Returns:
-      one of ADF, GAMESS, GAMESS UK, Gaussian, Jaguar, Molpro, ORCA, or
+      one of ADF, GAMESS, GAMESS UK, Gaussian, Jaguar, Molpro, ORCA, TeraChem or
         None (if it cannot figure it out or the file does not exist).
     """
 
@@ -100,6 +100,10 @@ def ccopen(source, *args, **kargs):
 
         elif line.find("PSI") >= 0 and line.find("Ab Initio Electronic Structure") >= 0:
             filetype = psiparser.Psi
+            break
+        
+        elif line.find("TeraChem") >= 0:
+            filetype = terachemparser.TeraChem
             break
 
     # Need to close file before creating a instance.
